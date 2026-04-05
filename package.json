@@ -2,7 +2,8 @@
   "name": "job-tracker",
   "version": "1.0.0",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "postinstall": "npm rebuild sqlite3 --build-from-source"
   },
   "dependencies": {
     "body-parser": "^2.2.2",
