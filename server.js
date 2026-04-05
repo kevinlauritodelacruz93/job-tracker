@@ -32,13 +32,15 @@ app.post('/login', (req, res) => {
 
     if (row) {
       req.session.user_id = row.id;
-      console.log("Login success, existing user:", row.id);
+      req.session.email = row.email;
+      console.log("Login success, existing user:", row.email);
       res.json({ success: true });
     } else {
       db.run("INSERT INTO users (email) VALUES (?)", [email], function(err) {
         if (err) return res.status(500).json({ error: err.message });
         req.session.user_id = this.lastID;
-        console.log("Login success, new user:", this.lastID);
+        req.session.email = email;
+        console.log("Login success, new user:", email);
         res.json({ success: true });
       });
     }
@@ -47,7 +49,7 @@ app.post('/login', (req, res) => {
 
 // -------------------- JOB ROUTES --------------------
 app.get('/jobs', (req, res) => {
-  console.log("GET /jobs for user_id:", req.session.user_id);
+  console.log("GET /jobs for user:", req.session.email);
   if (!req.session.user_id) {
     return res.json({ error: "Not logged in" });
   }
